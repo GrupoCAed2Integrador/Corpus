@@ -26,6 +26,8 @@ Aplicación de consola desarrollada en lenguaje C para administrar los pacientes
 
 El sistema utiliza únicamente datos ficticios y administrativos. No se almacenan diagnósticos, tratamientos ni datos clínicos.
 
+El informe final está en [`docs/informe.md`](docs/informe.md) y los casos de prueba en [`pruebas/casos_prueba.txt`](pruebas/casos_prueba.txt).
+
 ## Objetivos
 
 - Aplicar los conceptos de punteros, memoria dinámica y recursividad.
@@ -154,7 +156,8 @@ Corpus/
 ├── pruebas/
 │   └── casos_prueba.txt    # Casos de prueba del sistema
 ├── docs/
-│   └── Corpus.jpg          # Logo del sistema
+│   ├── Corpus.jpg          # Logo del sistema
+│   └── informe.md          # Informe final del proyecto
 ├── README.md               # Documentacion del repositorio
 └── rules/                  # Normas y material de catedra
 ```
@@ -216,6 +219,8 @@ o, en Windows:
 
 ## Plan de pruebas
 
+Los casos detallados, con la entrada exacta y la salida esperada, estan en `pruebas/casos_prueba.txt`.
+
 - [ ] Operar sobre un árbol vacío.
 - [ ] Dar de alta el paciente inicial con historia clínica 150.
 - [ ] Dar de alta un paciente menor, con historia 90.
@@ -257,5 +262,6 @@ o, en Windows:
 - [x] Implementación de la eliminación con los tres casos y de la raíz.
 - [x] Integración de la modificación y la eliminación en el menú.
 - [x] Persistencia automática en `pacientes.dat`: carga al iniciar y guardado al salir.
+- [x] Casos de prueba documentados en `pruebas/casos_prueba.txt`.
 - [ ] Ejecución completa del plan de pruebas en Dev-C++.
-- [ ] Redacción del informe final.
+- [x] Redacción del informe final en `docs/informe.md`.
