@@ -1,0 +1,22 @@
+# Artefactos de compilacion
+*.o
+*.obj
+*.exe
+*.a
+*.dll
+
+# Estado local del IDE (Dev-C++)
+*.layout
+*.dsk
+
+# Archivos generados por Dev-C++
+Makefile.win
+
+# Datos de ejecucion
+pacientes.dat
+
+# Temporales y respaldos
+*.tmp
+*.bak
+*~
+*.log
