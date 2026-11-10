@@ -1,7 +1,13 @@
-# Corpus - Sistema de Gestión de Pacientes de un Hospital
+<p align="center">
+  <img src="docs/Corpus.jpg" alt="Logo del sistema Corpus" width="180">
+</p>
 
-Trabajo práctico integrador de **Algoritmos y Estructuras de Datos II**  
-FaCENA — Universidad Nacional del Nordeste (UNNE)
+<h1 align="center">Corpus - Sistema de Gestión de Pacientes de un Hospital</h1>
+
+<p align="center">
+  Trabajo práctico integrador de <strong>Algoritmos y Estructuras de Datos II</strong><br>
+  FaCENA — Universidad Nacional del Nordeste (UNNE)
+</p>
 
 ## Integrantes y roles
 
@@ -144,6 +150,8 @@ Corpus/
 ├── validaciones.c          # Implementacion de validaciones
 ├── pruebas/
 │   └── casos_prueba.txt    # Casos de prueba del sistema
+├── docs/
+│   └── Corpus.jpg          # Logo del sistema
 ├── README.md               # Documentacion del repositorio
 └── rules/                  # Normas y material de catedra
 ```
