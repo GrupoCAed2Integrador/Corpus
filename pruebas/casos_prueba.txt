@@ -1,0 +1,293 @@
+========================================================================
+SISTEMA DE GESTION DE PACIENTES - CORPUS
+Casos de prueba
+Algoritmos y Estructuras de Datos II - FaCENA - UNNE
+========================================================================
+
+1. OBJETIVO
+------------------------------------------------------------------------
+Verificar el funcionamiento del ABB de pacientes y de la persistencia
+binaria: altas, busqueda, modificacion, bajas con los tres casos,
+recorrido InOrden, conteo, validaciones, carga y guardado del archivo
+pacientes.dat.
+
+2. ENTORNO
+------------------------------------------------------------------------
+- Compilador: Embarcadero Dev-C++ 6.3 / TDM-GCC 9.2.0 (64 bits).
+- Estandar: C99.
+- Archivo de datos: pacientes.dat (binario, en el directorio de trabajo).
+- Los mensajes del programa son en ASCII y sin tildes; en este documento
+  se transcriben tal cual aparecen en pantalla.
+
+3. PREPARACION
+------------------------------------------------------------------------
+Antes de comenzar, verificar que no exista el archivo pacientes.dat en la
+carpeta del ejecutable. Si existe, eliminarlo para partir de un arbol
+vacio.
+
+4. CONVENCIONES
+------------------------------------------------------------------------
+- Cada linea de la columna "Entrada" es una accion seguida de Enter.
+- <vacio> significa presionar Enter sin escribir nada.
+- Las respuestas de confirmacion aceptan s o n (mayuscula o minuscula).
+- "..." indica que la salida continua con el menu principal.
+
+5. CASOS DE PRUEBA
+------------------------------------------------------------------------
+
+CP-01 - Listado y conteo con el arbol vacio
+Precondicion: no existe pacientes.dat.
+Entrada:
+  5
+  6
+  0
+Salida esperada:
+  - "No hay pacientes registrados."
+  - "Cantidad total de pacientes: 0"
+  - "Datos guardados en pacientes.dat."
+  - "Memoria liberada correctamente."
+
+CP-02 - Altas y recorrido InOrden
+Precondicion: arbol vacio.
+Entrada (siete altas consecutivas):
+  1 / 150 / Ana Root / 11111111 / 45 / 111 / Clinica
+  1 / 90  / Beto Left / 22222222 / 30 / 222 / Pediatria
+  1 / 210 / Caro Right / 33333333 / 35 / 333 / Cardiologia
+  1 / 60  / Dora Leaf / 44444444 / 20 / 444 / Guardia
+  1 / 120 / Eze Mid / 55555555 / 25 / 555 / Terapia
+  1 / 180 / Fede MidR / 66666666 / 40 / 666 / Cirugia
+  1 / 240 / Gabi Far / 77777777 / 50 / 777 / Traumatologia
+  5
+  6
+Salida esperada:
+  - Siete veces "Paciente registrado correctamente."
+  - El listado InOrden muestra, en este orden:
+      60, 90, 120, 150, 180, 210, 240
+  - "Cantidad total de pacientes: 7"
+
+CP-03 - Alta con historia clinica duplicada
+Precondicion: continuar con el arbol de CP-02.
+Entrada:
+  1
+  150
+Salida esperada:
+  - "Error: ya existe un paciente con la historia clinica 150."
+  - El conteo sigue siendo 7.
+
+CP-04 - Busqueda de una historia existente
+Precondicion: arbol de CP-02.
+Entrada:
+  2
+  120
+Salida esperada:
+  - Encabezado de tabla y la fila del paciente Eze Mid con historia 120.
+
+CP-05 - Busqueda de una historia inexistente
+Entrada:
+  2
+  999
+Salida esperada:
+  - "No se encontro un paciente con la historia clinica 999."
+
+CP-06 - Modificacion conservando campos
+Precondicion: arbol de CP-02.
+Entrada:
+  3
+  180
+  s
+  Fede Modificado
+  <vacio>          (DNI: conserva 66666666)
+  41
+  <vacio>          (telefono: conserva 666)
+  <vacio>          (area: conserva Cirugia)
+Salida esperada:
+  - Muestra los datos actuales de Fede MidR.
+  - "Datos actualizados:" con nombre "Fede Modificado" y edad 41.
+  - DNI, telefono y area conservan sus valores anteriores.
+
+CP-07 - Cancelacion de la modificacion
+Entrada:
+  3
+  180
+  n
+Salida esperada:
+  - "Modificacion cancelada."
+  - Los datos del paciente no cambian.
+
+CP-08 - Baja de un nodo hoja
+Precondicion: arbol de CP-02 (7 pacientes).
+Entrada:
+  4
+  60
+  s
+  5
+  6
+Salida esperada:
+  - "Paciente eliminado correctamente."
+  - Listado: 90, 120, 150, 180, 210, 240.
+  - "Cantidad total de pacientes: 6"
+
+CP-09 - Baja de un nodo con un solo hijo
+Precondicion: continuar de CP-08 (el nodo 90 quedo solo con el hijo
+derecho 120).
+Entrada:
+  4
+  90
+  s
+  5
+  6
+Salida esperada:
+  - "Paciente eliminado correctamente."
+  - Listado: 120, 150, 180, 210, 240.
+  - "Cantidad total de pacientes: 5"
+
+CP-10 - Baja de un nodo con dos hijos (raiz)
+Precondicion: continuar de CP-09 (raiz 150 con hijos 120 y 210).
+Entrada:
+  4
+  150
+  s
+  5
+  6
+Salida esperada:
+  - "Paciente eliminado correctamente."
+  - El sucesor InOrden 180 pasa a ser la nueva raiz.
+  - Listado: 120, 180, 210, 240.
+  - "Cantidad total de pacientes: 4"
+
+CP-11 - Baja de la raiz con un solo hijo
+Precondicion: continuar de CP-10 (raiz 180, izquierdo 120, derecho 210
+con hijo derecho 240).
+Entrada:
+  4 / 120 / s
+  4 / 210 / s
+  5 / 6
+  4 / 180 / s
+  5 / 6
+Salida esperada:
+  - Tras eliminar 120 y 210, el listado es: 180, 240.
+  - Al eliminar 180, el 240 queda como raiz.
+  - Listado final: 240.
+  - "Cantidad total de pacientes: 1"
+
+CP-12 - Cancelacion de una baja
+Precondicion: arbol con el paciente 240.
+Entrada:
+  4
+  240
+  n
+  6
+Salida esperada:
+  - "Eliminacion cancelada."
+  - "Cantidad total de pacientes: 1"
+
+CP-13 - Validacion de entradas incorrectas
+Precondicion: arbol con el paciente 240 (historia 150 libre).
+Entrada:
+  abc              (opcion de menu invalida)
+  1
+  0                (historia invalida)
+  150
+  123              (nombre invalido)
+  Juan Perez
+  12ab             (DNI invalido)
+  12345678
+  200              (edad fuera de rango)
+  30
+  1234
+  <vacio>          (area vacia)
+  Clinica
+Salida esperada:
+  - "Error: ingrese un numero entero valido." (opcion)
+  - "Error: el valor debe estar entre 1 y 999999999." (historia)
+  - "Error: el nombre no es valido. Use solo letras y espacios."
+  - "Error: el DNI debe contener 7 u 8 digitos."
+  - "Error: el valor debe estar entre 0 y 120." (edad)
+  - "Error: el area no puede estar vacia."
+  - Luego de corregir cada dato: "Paciente registrado correctamente."
+
+CP-14 - Persistencia: guardado y recarga
+Precondicion: arbol con 240 y 150 (resultado de CP-13).
+Entrada:
+  0
+  (volver a ejecutar el programa)
+  5
+  6
+Salida esperada:
+  - Al salir: "Datos guardados en pacientes.dat." y
+    "Memoria liberada correctamente."
+  - Al reabrir: "Se cargaron 2 pacientes desde pacientes.dat."
+  - Listado: 150 y 240 en orden ascendente.
+
+CP-15 - Primera ejecucion sin archivo
+Precondicion: eliminar pacientes.dat.
+Entrada:
+  5
+  6
+  0
+Salida esperada:
+  - No aparece el mensaje "Se cargaron ... pacientes".
+  - "No hay pacientes registrados." y conteo 0.
+
+CP-16 - Archivo de datos vacio
+Precondicion: arbol vacio guardado (archivo de 0 bytes).
+Entrada:
+  5
+  6
+  0
+Salida esperada:
+  - El sistema inicia vacio, sin errores.
+  - "No hay pacientes registrados." y conteo 0.
+
+CP-17 - Archivo de datos danado
+Precondicion: reemplazar pacientes.dat por un archivo de al menos 148
+bytes con contenido arbitrario (por ejemplo, 148 bytes en 0xFF o un texto
+largo). Con archivos mas cortos que un registro, el sistema simplemente
+no lee ninguno y no muestra el aviso.
+Entrada:
+  6
+  0
+Salida esperada:
+  - "Aviso: se omitieron N registro(s) invalidos o duplicados de
+    pacientes.dat."
+  - "Cantidad total de pacientes: 0"
+  - El programa continua funcionando normalmente.
+
+CP-18 - Liberacion de memoria
+Precondicion: cualquiera.
+Entrada:
+  0
+Salida esperada:
+  - "Saliendo del sistema..."
+  - "Datos guardados en pacientes.dat."
+  - "Memoria liberada correctamente."
+
+6. RESUMEN
+------------------------------------------------------------------------
++-------+--------------------------------------------------+---------+
+| Caso  | Descripcion                                      | Estado  |
++-------+--------------------------------------------------+---------+
+| CP-01 | Listado y conteo con arbol vacio                 |         |
+| CP-02 | Altas y recorrido InOrden                        |         |
+| CP-03 | Alta duplicada                                   |         |
+| CP-04 | Busqueda existente                               |         |
+| CP-05 | Busqueda inexistente                             |         |
+| CP-06 | Modificacion conservando campos                  |         |
+| CP-07 | Cancelacion de modificacion                      |         |
+| CP-08 | Baja de nodo hoja                                |         |
+| CP-09 | Baja de nodo con un hijo                         |         |
+| CP-10 | Baja de nodo con dos hijos (raiz)                |         |
+| CP-11 | Baja de raiz con un hijo                         |         |
+| CP-12 | Cancelacion de baja                              |         |
+| CP-13 | Validacion de entradas                           |         |
+| CP-14 | Persistencia: guardado y recarga                 |         |
+| CP-15 | Primera ejecucion sin archivo                    |         |
+| CP-16 | Archivo de datos vacio                           |         |
+| CP-17 | Archivo de datos danado                          |         |
+| CP-18 | Liberacion de memoria                            |         |
++-------+--------------------------------------------------+---------+
+
+Los casos CP-01 a CP-18 fueron verificados con el compilador TDM-GCC
+9.2.0 de Dev-C++ usando flujos de entrada automatizados. La columna
+"Estado" queda para que el equipo marque el resultado de la ejecucion
+manual en el IDE.
