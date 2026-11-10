@@ -1,4 +1,4 @@
-# Sistema de Gestión de Pacientes de un Hospital
+# Corpus - Sistema de Gestión de Pacientes de un Hospital
 
 Trabajo práctico integrador de **Algoritmos y Estructuras de Datos II**  
 FaCENA — Universidad Nacional del Nordeste (UNNE)
@@ -233,9 +233,11 @@ o, en Windows:
 ## Estado del proyecto
 
 - [x] Lectura de las normas de cátedra y definición inicial de la estructura.
-- [ ] Implementación de `pacientes.h` y `pacientes.c`.
-- [ ] Implementación de `arbol_pacientes.h` y `arbol_pacientes.c`.
-- [ ] Implementación de `validaciones.h` y `validaciones.c`.
-- [ ] Integración del menú en `main.c`.
-- [ ] Ejecución del plan de pruebas.
+- [x] Implementación de `pacientes.h` y `pacientes.c`.
+- [x] Implementación de `validaciones.h` y `validaciones.c`.
+- [x] Primera parte de `arbol_pacientes.h` y `arbol_pacientes.c`: inicialización, alta con control de duplicados, búsqueda, recorrido InOrden, conteo y liberación.
+- [x] Integración del menú en `main.c` para alta, búsqueda, listado, cantidad y salida.
+- [ ] Implementación de la modificación de datos.
+- [ ] Implementación de la eliminación con los tres casos.
+- [ ] Ejecución completa del plan de pruebas.
 - [ ] Redacción del informe final.
