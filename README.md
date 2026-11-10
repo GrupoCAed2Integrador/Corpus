@@ -1,1 +1,241 @@
-Realizando el primer commit
+# Sistema de Gestión de Pacientes de un Hospital
+
+Trabajo práctico integrador de **Algoritmos y Estructuras de Datos II**  
+FaCENA — Universidad Nacional del Nordeste (UNNE)
+
+## Integrantes y roles
+
+| Integrante | Rol principal |
+| :--- | :--- |
+| Alan | Análisis, requisitos y diccionario de datos. |
+| Benja | Diseño de tipos y archivos `.h`, inicialización e inserción con control de duplicados. |
+| Mariano | Búsqueda recursiva y modificación de datos. |
+| Santino | Eliminación recursiva con los tres casos y eliminación de la raíz. |
+| Brian | Recorrido InOrden, conteo y validaciones. |
+| Gastón | `main.c`, menú, integración, pruebas generales, README e informe. |
+
+## Descripción
+
+Aplicación de consola desarrollada en lenguaje C para administrar los pacientes de un hospital. La información se organiza en un **árbol binario de búsqueda (ABB)** ordenado por **número de historia clínica**, que actúa como clave única.
+
+El sistema utiliza únicamente datos ficticios y administrativos. No se almacenan diagnósticos, tratamientos ni datos clínicos.
+
+## Objetivos
+
+- Aplicar los conceptos de punteros, memoria dinámica y recursividad.
+- Implementar un tipo de dato abstracto basado en un árbol binario de búsqueda.
+- Mantener el código modularizado, comentado y legible.
+- Garantizar la validación de entradas y la liberación completa de la memoria.
+
+## Requisitos funcionales
+
+1. Registrar un paciente mediante inserción recursiva en el ABB.
+2. Rechazar historias clínicas duplicadas.
+3. Buscar un paciente por número de historia clínica.
+4. Modificar los datos de un paciente sin alterar su clave.
+5. Eliminar un paciente contemplando los tres casos:
+   - nodo hoja;
+   - nodo con un solo hijo;
+   - nodo con dos hijos, usando el sucesor InOrden o el predecesor.
+   La eliminación de la raíz debe funcionar correctamente.
+6. Listar los pacientes en orden ascendente mediante un recorrido InOrden.
+7. Informar la cantidad total de pacientes con un conteo recursivo.
+8. Repetir el menú hasta que el usuario elija salir y liberar toda la memoria antes de finalizar.
+
+## Requisitos no funcionales
+
+- Código escrito en C estándar.
+- Organización modular y estrategia Top-Down.
+- El `main` solo coordina el menú y las llamadas a los módulos.
+- Sin variables globales.
+- Validación de historias clínicas no positivas, edades fuera de rango y cadenas vacías.
+- Verificación del resultado de `malloc`.
+- Prevención de accesos a memoria inválida, punteros colgantes y fugas de memoria.
+- Mensajes claros y consistentes para el usuario.
+- Código y comentarios sin tildes ni letras `ñ`, según la convención de la cátedra.
+
+## Estructura de datos
+
+### Paciente
+
+```c
+#define MAX_NOMBRE 60
+#define MAX_DNI 16
+#define MAX_TELEFONO 24
+#define MAX_AREA 40
+#define EDAD_MINIMA 0
+#define EDAD_MAXIMA 120
+
+typedef char tNombre[MAX_NOMBRE];
+typedef char tDni[MAX_DNI];
+typedef char tTelefono[MAX_TELEFONO];
+typedef char tArea[MAX_AREA];
+
+typedef struct {
+    int historiaClinica;
+    tNombre nombre;
+    tDni dni;
+    int edad;
+    tTelefono telefono;
+    tArea area;
+} tPaciente;
+```
+
+El DNI se almacena como texto para conservar los ceros iniciales. El teléfono es opcional.
+
+### Nodo del árbol
+
+```c
+typedef struct nodoPaciente {
+    tPaciente dato;
+    struct nodoPaciente *izquierdo;
+    struct nodoPaciente *derecho;
+} tNodoPaciente;
+
+typedef tNodoPaciente *tArbolPacientes;
+```
+
+`tArbolPacientes` es un alias del puntero a la raíz. De esta manera, las funciones que modifican la estructura reciben `tArbolPacientes *`, mientras que las funciones de consulta reciben `tArbolPacientes` por valor.
+
+### Propiedad de orden del ABB
+
+Para cada nodo del árbol:
+
+- todas las claves del subárbol izquierdo son menores que la clave del nodo;
+- todas las claves del subárbol derecho son mayores que la clave del nodo;
+- no se permiten claves repetidas.
+
+Ejemplo:
+
+```text
+          150
+         /   \
+       90    210
+      /  \   /  \
+    60  120 180 240
+```
+
+El recorrido InOrden de este árbol produce: `60, 90, 120, 150, 180, 210, 240`.
+
+## Menú principal
+
+```text
+1. Registrar paciente
+2. Buscar paciente
+3. Modificar paciente
+4. Eliminar paciente
+5. Listar pacientes en orden ascendente
+6. Mostrar cantidad de pacientes
+0. Salir
+```
+
+## Organización del proyecto
+
+Los archivos se incorporarán de forma incremental:
+
+```text
+Corpus/
+├── main.c                  # Menu y coordinacion general
+├── pacientes.h             # Tipos y prototipos del paciente
+├── pacientes.c             # Carga, muestra y modificacion de datos
+├── arbol_pacientes.h       # Tipos y prototipos del ABB
+├── arbol_pacientes.c       # Operaciones del ABB
+├── validaciones.h          # Prototipos de validacion
+├── validaciones.c          # Implementacion de validaciones
+├── pruebas/
+│   └── casos_prueba.txt    # Casos de prueba del sistema
+├── README.md               # Documentacion del repositorio
+└── rules/                  # Normas y material de catedra
+```
+
+La entrega final puede incluir una copia de este documento como `README.txt`, según lo solicitado por la cátedra.
+
+## Operaciones del ABB
+
+| Operación | Estrategia | Complejidad promedio |
+| :--- | :--- | :--- |
+| Inicialización | Asignar `NULL` a la raíz. | O(1) |
+| Alta | Inserción recursiva según la clave; rechazo de duplicados. | O(log n) |
+| Búsqueda | Descenso recursivo por una sola rama. | O(log n) |
+| Modificación | Búsqueda del nodo y actualización de los campos no clave. | O(log n) |
+| Baja | Tres casos; con dos hijos se usa el mínimo del subárbol derecho. | O(log n) |
+| Listado | Recorrido InOrden. | O(n) |
+| Conteo | `1 + contar(izquierdo) + contar(derecho)`. | O(n) |
+| Liberación | Recorrido en postorden con `free`. | O(n) |
+
+En el peor caso, cuando el árbol queda degenerado, las operaciones de búsqueda, alta y baja pueden degradarse a O(n).
+
+## Validaciones previstas
+
+- Historia clínica entera y mayor que cero.
+- Edad dentro de un rango razonable, por ejemplo de 0 a 120 años.
+- Nombre y área no vacíos.
+- DNI compuesto únicamente por dígitos y con longitud adecuada.
+- Teléfono opcional; si se carga, con formato básico válido.
+- Lectura de cadenas con `fgets`, controlando el tamaño y quitando el salto de línea.
+- Confirmación explícita antes de eliminar un paciente.
+
+## Compilación y ejecución
+
+Con GCC:
+
+```bash
+gcc -std=c11 -Wall -Wextra main.c pacientes.c arbol_pacientes.c validaciones.c -o sistema_pacientes
+```
+
+En Windows:
+
+```bash
+gcc -std=c11 -Wall -Wextra main.c pacientes.c arbol_pacientes.c validaciones.c -o sistema_pacientes.exe
+```
+
+Ejecución:
+
+```bash
+./sistema_pacientes
+```
+
+o, en Windows:
+
+```powershell
+.\sistema_pacientes.exe
+```
+
+## Plan de pruebas
+
+- [ ] Operar sobre un árbol vacío.
+- [ ] Dar de alta el paciente inicial con historia clínica 150.
+- [ ] Dar de alta un paciente menor, con historia 90.
+- [ ] Dar de alta un paciente mayor, con historia 210.
+- [ ] Intentar registrar una historia clínica duplicada.
+- [ ] Buscar una historia existente.
+- [ ] Buscar una historia inexistente.
+- [ ] Verificar que el listado InOrden sea ascendente.
+- [ ] Eliminar un nodo hoja.
+- [ ] Eliminar un nodo con un solo hijo.
+- [ ] Eliminar un nodo con dos hijos.
+- [ ] Eliminar la raíz del árbol.
+- [ ] Probar historias no positivas, edades inválidas y cadenas vacías.
+- [ ] Verificar que toda la memoria se libere al salir.
+
+## Convenciones de código
+
+- Tipos personalizados con prefijo `t`: `tPaciente`, `tNodoPaciente`, `tArbolPacientes`.
+- Parámetros formales con prefijo `p`: `pRaiz`, `pPaciente`, `pHistoria`.
+- Constantes con `#define` y nombres en mayúsculas.
+- Prototipos declarados en los archivos `.h`.
+- Implementación en los archivos `.c`.
+- Uso de `malloc` con casting explícito y verificación de `NULL`.
+- Uso de `free` y asignación posterior de `NULL`.
+- Liberación del árbol mediante recorrido en postorden.
+- Comentarios claros y sin caracteres especiales.
+
+## Estado del proyecto
+
+- [x] Lectura de las normas de cátedra y definición inicial de la estructura.
+- [ ] Implementación de `pacientes.h` y `pacientes.c`.
+- [ ] Implementación de `arbol_pacientes.h` y `arbol_pacientes.c`.
+- [ ] Implementación de `validaciones.h` y `validaciones.c`.
+- [ ] Integración del menú en `main.c`.
+- [ ] Ejecución del plan de pruebas.
+- [ ] Redacción del informe final.
