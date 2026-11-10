@@ -146,8 +146,11 @@ Corpus/
 ├── pacientes.c             # Carga, muestra y modificacion de datos
 ├── arbol_pacientes.h       # Tipos y prototipos del ABB
 ├── arbol_pacientes.c       # Operaciones del ABB
+├── archivo_pacientes.h     # Prototipos de persistencia
+├── archivo_pacientes.c     # Carga y guardado del archivo binario
 ├── validaciones.h          # Prototipos de validacion
 ├── validaciones.c          # Implementacion de validaciones
+├── pacientes.dat           # Datos del sistema (generado al salir)
 ├── pruebas/
 │   └── casos_prueba.txt    # Casos de prueba del sistema
 ├── docs/
@@ -173,18 +176,30 @@ La entrega final puede incluir una copia de este documento como `README.txt`, se
 
 En el peor caso, cuando el árbol queda degenerado, las operaciones de búsqueda, alta y baja pueden degradarse a O(n).
 
+## Persistencia
+
+Los pacientes se guardan automáticamente en `pacientes.dat` al elegir la opción `0` (o al finalizar la entrada por teclado) y se cargan al iniciar el programa.
+
+- El archivo es binario: se escribe un `tPaciente` completo por registro con `fwrite` y se lee con `fread`.
+- Se guarda en preorden, de modo que al reinsertar los registros se reconstruye la misma forma del árbol.
+- No se guardan los punteros `izquierdo` y `derecho`: al cargar, el árbol se reconstruye insertando cada paciente.
+- Si el archivo no existe (primera ejecución), el sistema inicia con un árbol vacío.
+- Al leer, se validan los datos y se omiten los registros inválidos o con historia duplicada, informando la cantidad omitida.
+- El archivo se crea en el directorio de trabajo desde el que se ejecuta el programa, normalmente la carpeta del proyecto.
+- El tamaño de `tPaciente` depende del compilador, por lo que el archivo debe abrirse con el mismo compilador que lo generó.
+
 ## Compilación y ejecución
 
 Con GCC:
 
 ```bash
-gcc -std=c11 -Wall -Wextra main.c pacientes.c arbol_pacientes.c validaciones.c -o sistema_pacientes
+gcc -std=c11 -Wall -Wextra main.c pacientes.c arbol_pacientes.c archivo_pacientes.c validaciones.c -o sistema_pacientes
 ```
 
 En Windows:
 
 ```bash
-gcc -std=c11 -Wall -Wextra main.c pacientes.c arbol_pacientes.c validaciones.c -o sistema_pacientes.exe
+gcc -std=c11 -Wall -Wextra main.c pacientes.c arbol_pacientes.c archivo_pacientes.c validaciones.c -o sistema_pacientes.exe
 ```
 
 Ejecución:
@@ -215,6 +230,9 @@ o, en Windows:
 - [ ] Eliminar la raíz del árbol.
 - [ ] Probar historias no positivas, edades inválidas y cadenas vacías.
 - [ ] Verificar que toda la memoria se libere al salir.
+- [ ] Verificar que al salir se genere `pacientes.dat` y al reabrir se recuperen los datos.
+- [ ] Verificar que la primera ejecución, sin archivo, inicie con el árbol vacío.
+- [ ] Verificar que se omitan los registros inválidos al cargar un archivo dañado.
 
 ## Convenciones de código
 
@@ -238,5 +256,6 @@ o, en Windows:
 - [x] Implementación de la modificación de datos sin alterar la clave.
 - [x] Implementación de la eliminación con los tres casos y de la raíz.
 - [x] Integración de la modificación y la eliminación en el menú.
+- [x] Persistencia automática en `pacientes.dat`: carga al iniciar y guardado al salir.
 - [ ] Ejecución completa del plan de pruebas en Dev-C++.
 - [ ] Redacción del informe final.

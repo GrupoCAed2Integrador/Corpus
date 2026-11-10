@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "arbol_pacientes.h"
+#include "archivo_pacientes.h"
 #include "pacientes.h"
 #include "validaciones.h"
 
@@ -18,6 +19,14 @@ int main(void) {
 
     iniciarArbol(&arbol);
     opcion = -1;
+
+    if (!cargarPacientesDesdeArchivo(&arbol, ARCHIVO_PACIENTES)) {
+        printf("Aviso: no se pudo leer %s. Se inicia con un arbol vacio.\n",
+               ARCHIVO_PACIENTES);
+    } else if (!arbolVacio(arbol)) {
+        printf("Se cargaron %d pacientes desde %s.\n",
+               contarPacientes(arbol), ARCHIVO_PACIENTES);
+    }
 
     do {
         mostrarMenu();
@@ -54,6 +63,12 @@ int main(void) {
                 break;
         }
     } while (opcion != 0);
+
+    if (guardarPacientesEnArchivo(arbol, ARCHIVO_PACIENTES)) {
+        printf("Datos guardados en %s.\n", ARCHIVO_PACIENTES);
+    } else {
+        printf("Aviso: no se pudieron guardar los datos del sistema.\n");
+    }
 
     liberarArbol(&arbol);
     printf("Memoria liberada correctamente.\n");
