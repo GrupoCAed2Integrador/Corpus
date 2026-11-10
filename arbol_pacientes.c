@@ -69,6 +69,57 @@ tPaciente *buscarPaciente(tArbolPacientes pRaiz, int pHistoriaClinica) {
     }
 }
 
+/* Devuelve el nodo con la menor clave del subarbol indicado. */
+static tArbolPacientes buscarMenor(tArbolPacientes pRaiz) {
+    if (pRaiz == NULL) {
+        return NULL;
+    }
+
+    while (pRaiz->izquierdo != NULL) {
+        pRaiz = pRaiz->izquierdo;
+    }
+    return pRaiz;
+}
+
+bool eliminarPaciente(tArbolPacientes *pRaiz, int pHistoriaClinica) {
+    tArbolPacientes nodoAEliminar;
+    int claveSucesor;
+
+    if (pRaiz == NULL || arbolVacio(*pRaiz)) {
+        return false;
+    }
+
+    if (pHistoriaClinica < (*pRaiz)->dato.historiaClinica) {
+        return eliminarPaciente(&((*pRaiz)->izquierdo), pHistoriaClinica);
+    }
+
+    if (pHistoriaClinica > (*pRaiz)->dato.historiaClinica) {
+        return eliminarPaciente(&((*pRaiz)->derecho), pHistoriaClinica);
+    }
+
+    /* Caso 1 y caso 2: nodo hoja o nodo con un solo hijo. */
+    if ((*pRaiz)->izquierdo == NULL) {
+        nodoAEliminar = *pRaiz;
+        *pRaiz = (*pRaiz)->derecho;
+        free(nodoAEliminar);
+        return true;
+    }
+
+    if ((*pRaiz)->derecho == NULL) {
+        nodoAEliminar = *pRaiz;
+        *pRaiz = (*pRaiz)->izquierdo;
+        free(nodoAEliminar);
+        return true;
+    }
+
+    /* Caso 3: nodo con dos hijos. Se reemplaza el dato por el sucesor
+       InOrden (menor del subarbol derecho) y se elimina ese nodo. */
+    nodoAEliminar = buscarMenor((*pRaiz)->derecho);
+    claveSucesor = nodoAEliminar->dato.historiaClinica;
+    (*pRaiz)->dato = nodoAEliminar->dato;
+    return eliminarPaciente(&((*pRaiz)->derecho), claveSucesor);
+}
+
 static void mostrarInOrdenAux(tArbolPacientes pRaiz) {
     if (!arbolVacio(pRaiz)) {
         mostrarInOrdenAux(pRaiz->izquierdo);

@@ -16,6 +16,7 @@ void iniciarArbol(tArbolPacientes *pRaiz);
 bool arbolVacio(tArbolPacientes pRaiz);
 bool insertarPaciente(tArbolPacientes *pRaiz, tPaciente pPaciente);
 tPaciente *buscarPaciente(tArbolPacientes pRaiz, int pHistoriaClinica);
+bool eliminarPaciente(tArbolPacientes *pRaiz, int pHistoriaClinica);
 void mostrarInOrden(tArbolPacientes pRaiz);
 int contarPacientes(tArbolPacientes pRaiz);
 void liberarArbol(tArbolPacientes *pRaiz);

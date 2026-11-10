@@ -26,6 +26,7 @@ typedef struct {
 } tPaciente;
 
 bool cargarDatosPaciente(tPaciente *pPaciente, int pHistoriaClinica);
+bool modificarDatosPaciente(tPaciente *pPaciente);
 void mostrarPaciente(tPaciente pPaciente);
 void mostrarEncabezadoPacientes(void);
 

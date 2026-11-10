@@ -137,7 +137,7 @@ El recorrido InOrden de este árbol produce: `60, 90, 120, 150, 180, 210, 240`.
 
 ## Organización del proyecto
 
-Los archivos se incorporarán de forma incremental:
+Organización de archivos:
 
 ```text
 Corpus/
@@ -172,16 +172,6 @@ La entrega final puede incluir una copia de este documento como `README.txt`, se
 | Liberación | Recorrido en postorden con `free`. | O(n) |
 
 En el peor caso, cuando el árbol queda degenerado, las operaciones de búsqueda, alta y baja pueden degradarse a O(n).
-
-## Validaciones previstas
-
-- Historia clínica entera y mayor que cero.
-- Edad dentro de un rango razonable, por ejemplo de 0 a 120 años.
-- Nombre y área no vacíos.
-- DNI compuesto únicamente por dígitos y con longitud adecuada.
-- Teléfono opcional; si se carga, con formato básico válido.
-- Lectura de cadenas con `fgets`, controlando el tamaño y quitando el salto de línea.
-- Confirmación explícita antes de eliminar un paciente.
 
 ## Compilación y ejecución
 
@@ -245,7 +235,8 @@ o, en Windows:
 - [x] Implementación de `validaciones.h` y `validaciones.c`.
 - [x] Primera parte de `arbol_pacientes.h` y `arbol_pacientes.c`: inicialización, alta con control de duplicados, búsqueda, recorrido InOrden, conteo y liberación.
 - [x] Integración del menú en `main.c` para alta, búsqueda, listado, cantidad y salida.
-- [ ] Implementación de la modificación de datos.
-- [ ] Implementación de la eliminación con los tres casos.
-- [ ] Ejecución completa del plan de pruebas.
+- [x] Implementación de la modificación de datos sin alterar la clave.
+- [x] Implementación de la eliminación con los tres casos y de la raíz.
+- [x] Integración de la modificación y la eliminación en el menú.
+- [ ] Ejecución completa del plan de pruebas en Dev-C++.
 - [ ] Redacción del informe final.

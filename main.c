@@ -7,6 +7,8 @@
 void mostrarMenu(void);
 void registrarPaciente(tArbolPacientes *pRaiz);
 void buscarPacienteMenu(tArbolPacientes pRaiz);
+void modificarPacienteMenu(tArbolPacientes pRaiz);
+void eliminarPacienteMenu(tArbolPacientes *pRaiz);
 void listarPacientes(tArbolPacientes pRaiz);
 void mostrarCantidadPacientes(tArbolPacientes pRaiz);
 
@@ -33,10 +35,10 @@ int main(void) {
                 buscarPacienteMenu(arbol);
                 break;
             case 3:
-                printf("\nLa modificacion se implementara en la segunda parte.\n");
+                modificarPacienteMenu(arbol);
                 break;
             case 4:
-                printf("\nLa eliminacion se implementara en la segunda parte.\n");
+                eliminarPacienteMenu(&arbol);
                 break;
             case 5:
                 listarPacientes(arbol);
@@ -65,8 +67,8 @@ void mostrarMenu(void) {
     printf("==============================================\n");
     printf("1. Registrar paciente\n");
     printf("2. Buscar paciente\n");
-    printf("3. Modificar paciente (segunda parte)\n");
-    printf("4. Eliminar paciente (segunda parte)\n");
+    printf("3. Modificar paciente\n");
+    printf("4. Eliminar paciente\n");
     printf("5. Listar pacientes en orden ascendente\n");
     printf("6. Mostrar cantidad de pacientes\n");
     printf("0. Salir\n");
@@ -116,6 +118,75 @@ void buscarPacienteMenu(tArbolPacientes pRaiz) {
         printf("\nPaciente encontrado:\n");
         mostrarEncabezadoPacientes();
         mostrarPaciente(*paciente);
+    }
+}
+
+void modificarPacienteMenu(tArbolPacientes pRaiz) {
+    tPaciente *paciente;
+    int historiaClinica;
+
+    printf("\n--- Modificacion de paciente ---\n");
+
+    if (!leerEnteroEnRango("Historia clinica: ", &historiaClinica, 1, MAX_HISTORIA)) {
+        return;
+    }
+
+    paciente = buscarPaciente(pRaiz, historiaClinica);
+    if (paciente == NULL) {
+        printf("No se encontro un paciente con la historia clinica %d.\n",
+               historiaClinica);
+        return;
+    }
+
+    printf("\nDatos actuales:\n");
+    mostrarEncabezadoPacientes();
+    mostrarPaciente(*paciente);
+
+    if (!confirmar("\nDesea modificar los datos de este paciente? (s/n): ")) {
+        printf("Modificacion cancelada.\n");
+        return;
+    }
+
+    if (!modificarDatosPaciente(paciente)) {
+        printf("No se pudieron modificar los datos del paciente.\n");
+        return;
+    }
+
+    printf("\nDatos actualizados:\n");
+    mostrarEncabezadoPacientes();
+    mostrarPaciente(*paciente);
+}
+
+void eliminarPacienteMenu(tArbolPacientes *pRaiz) {
+    tPaciente *paciente;
+    int historiaClinica;
+
+    printf("\n--- Eliminacion de paciente ---\n");
+
+    if (!leerEnteroEnRango("Historia clinica: ", &historiaClinica, 1, MAX_HISTORIA)) {
+        return;
+    }
+
+    paciente = buscarPaciente(*pRaiz, historiaClinica);
+    if (paciente == NULL) {
+        printf("No se encontro un paciente con la historia clinica %d.\n",
+               historiaClinica);
+        return;
+    }
+
+    printf("\nPaciente a eliminar:\n");
+    mostrarEncabezadoPacientes();
+    mostrarPaciente(*paciente);
+
+    if (!confirmar("\nConfirma la eliminacion? (s/n): ")) {
+        printf("Eliminacion cancelada.\n");
+        return;
+    }
+
+    if (eliminarPaciente(pRaiz, historiaClinica)) {
+        printf("Paciente eliminado correctamente.\n");
+    } else {
+        printf("No se pudo eliminar el paciente.\n");
     }
 }
 
